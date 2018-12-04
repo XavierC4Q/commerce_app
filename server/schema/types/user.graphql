@@ -1,0 +1,15 @@
+type User {
+    name: String!
+    password: String!
+    legion: String!
+}
+
+type Query {
+    allUsers: [User!]
+    getUser(name: String!): User
+    hello: String!
+}
+
+type Mutation {
+    addUser(name: String!, password: String!, legion: String!): User!
+}
