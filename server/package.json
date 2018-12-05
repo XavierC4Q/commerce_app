@@ -4,15 +4,22 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "babel-watch app.js",
+    "start": "nodemon --exec babel-node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "babel-cli": "^6.26.0",
+    "@babel/cli": "^7.2.0",
+    "@babel/core": "^7.2.0",
+    "@babel/node": "^7.2.0",
+    "@babel/plugin-transform-async-to-generator": "^7.2.0",
+    "@babel/polyfill": "^7.0.0",
+    "@babel/preset-env": "^7.2.0",
+    "babel-plugin-syntax-async-functions": "^6.13.0",
     "babel-preset-env": "^1.7.0",
-    "babel-watch": "^2.0.7"
+    "babel-watch": "^2.0.7",
+    "nodemon": "^1.18.7"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
@@ -23,9 +30,10 @@
     "express-graphql": "^0.7.1",
     "express-session": "^1.15.6",
     "graphql": "^14.0.2",
+    "knex": "^0.15.2",
     "merge-graphql-schemas": "^1.5.8",
     "morgan": "^1.9.1",
     "path": "^0.12.7",
-    "session": "^0.1.0"
+    "pg": "^7.7.1"
   }
 }

@@ -10,9 +10,10 @@ import session from 'express-session'
 import morgan from 'morgan'
 import { graphqlSchema } from './schema/index'
 
+import * as userRouter from './routes/userRoutes'
+
 const { types, resolvers } = graphqlSchema
 const app = express()
-const server = http.createServer(app)
 const schema = buildSchema(types)
 
 app.use(morgan('dev'))
@@ -26,6 +27,8 @@ app.use(session({
     secret: config.secret
 }))
 
+app.use('/user', userRouter.router)
+
 app.use('/graphql', graphqlHTTP({
   schema,
   rootValue: resolvers,
@@ -35,3 +38,4 @@ app.use('/graphql', graphqlHTTP({
 app.listen(config.port, (req, res) => {
     console.log(`SERVER UP AND RUNNING: localhost:${config.port}`)
 })
+

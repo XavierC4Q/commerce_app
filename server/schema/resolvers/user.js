@@ -1,7 +1,7 @@
 let fakeUsers = [
-  { name: "Xavier", password: "october", legion: "Bronx" },
-  { name: "Ruben", password: "cheers", legion: "Queens" },
-  { name: "Reed", password: "cheese", legion: "Brooklyn" }
+  { name: "Xavier", password: "october", city: "Bronx" },
+  { name: "Ruben", password: "cheers", city: "Queens" },
+  { name: "Reed", password: "cheese", city: "Brooklyn" }
 ];
 
 export default {
@@ -16,13 +16,13 @@ export default {
       return { message: "Not found" };
     }
   },
-  addUser: (name, password, legion) => {
+  addUser: (name, password, city) => {
     let newUser = {
       name: name,
       password: password,
-      legion: legion
+      city: city
     };
     fakeUsers.push(newUser);
-    return fakeUsers;
+    return newUser;
   }
 };
