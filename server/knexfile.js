@@ -1,5 +1,12 @@
+require('dotenv').config()
+
 module.exports = {
-    client: 'pg',
-    connection: 'postgres:///fights',
-    migrations: __dirname + '/migrations'
+    client: process.env.KNEX_CLIENT,
+    connection: process.env.DB,
+    migrations: { 
+        directory: __dirname + '/db/migrations'
+    },
+    seeds: { 
+        directory: __dirname + '/db/seeds'
+    }
 }
