@@ -1,28 +1,49 @@
-let fakeUsers = [
-  { name: "Xavier", password: "october", city: "Bronx" },
-  { name: "Ruben", password: "cheers", city: "Queens" },
-  { name: "Reed", password: "cheese", city: "Brooklyn" }
-];
+import knex from 'knex'
+import * as knexConfig from '../../knexfile'
+
+const db = knex(knexConfig)
 
 export default {
-  allUsers: () => {
-    return fakeUsers;
+  allUsers: async () => {
+      const allUsersDB = await db.select('*').from('user').then(rows => {
+        return rows
+      }).catch(err => {
+        console.log('ALL USERS ERROR',err)
+        return err
+      })
+      return allUsersDB
   },
-  getUser: name => {
-    let findUser = fakeUsers.find(user => user.name === name);
-    if (findUser) {
-      return findUser;
-    } else {
-      return { message: "Not found" };
+  getUser: async ({ username }) => {
+    try {
+      const singleUser = await db.select('*').from('user').where({ username: username }).then(rows => {
+        return rows[0]
+      })
+      return singleUser
+    }
+    catch(err){
+      return null
     }
   },
-  addUser: (name, password, city) => {
-    let newUser = {
-      name: name,
-      password: password,
-      city: city
-    };
-    fakeUsers.push(newUser);
-    return newUser;
+  addUser: async ({ username, password, email }) => {
+    try {
+      const newUser = await db.into('user')
+      .returning(['username', 'email'])
+      .insert({
+        username: username,
+        password: password,
+        email: email
+      })
+      .then(rows => {
+        return rows[0]
+      })
+      .catch(err => {
+        return err
+      })
+
+      return newUser
+    }
+    catch(err){
+      return err
+    }
   }
 };
