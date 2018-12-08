@@ -1,4 +1,5 @@
 type User {
+    id: ID!
     username: String!
     password: String!
     email: String!
@@ -6,9 +7,13 @@ type User {
 
 type Query {
     allUsers: [User]
+    getCurrentUser: User
     getUser(username: String!): User
+    isLoggedIn: Boolean!
 }
 
 type Mutation {
-    addUser(username: String!, password: String!, email: String!): User
+    login(username: String!, password: String!): User
+    register(username: String!, password: String!, email: String!): User
+    editUser(username: String, password: String, email: String): Boolean!
 }

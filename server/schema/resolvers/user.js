@@ -1,7 +1,6 @@
-import knex from "knex";
-import * as knexConfig from "../../knexfile";
-
-const db = knex(knexConfig);
+import { db } from '../../db/db'
+import { saltAndHashPassword } from '../../passport/passwordHelpers'
+import { authenticateUser } from '../../passport/authenticate'
 
 export default {
   allUsers: async () => {
@@ -30,14 +29,20 @@ export default {
       return null;
     }
   },
-  addUser: async ({ username, password, email }) => {
+  isLoggedIn: async (_, { req: { session } }) => {
+    if(session.passport){
+      return true
+    }
+    return false
+  },
+  register: async ({ username, password, email }, { req }) => {
     try {
       const newUser = await db
         .into("user")
-        .returning(["username", "email"])
+        .returning(["username", "email", "id"])
         .insert({
           username: username,
-          password: password,
+          password: saltAndHashPassword(password),
           email: email
         })
         .then(rows => {
@@ -47,7 +52,7 @@ export default {
           return err;
         });
 
-      return newUser;
+      authenticateUser(req, username, password)
     } catch (err) {
       return err;
     }

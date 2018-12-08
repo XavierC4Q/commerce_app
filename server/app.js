@@ -1,34 +1,49 @@
 import express from 'express'
-import http from 'http'
-import { config } from './config'
+import passport from 'passport'
+import {
+    config
+} from './config'
+import {
+    graphqlSchema
+} from './schema/index'
+import {
+    buildSchema
+} from 'graphql'
 import graphqlHTTP from 'express-graphql'
-import { buildSchema } from 'graphql'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import session from 'express-session'
 import morgan from 'morgan'
-import { graphqlSchema } from './schema/index'
 
-const { types, resolvers } = graphqlSchema
+const {
+    types,
+    resolvers
+} = graphqlSchema
 const app = express()
 const schema = buildSchema(types)
 
 app.use(morgan('dev'))
 app.use(cors())
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({
+    extended: false
+}))
 app.use(cookieParser())
 app.use(session({
     resave: false,
     saveUninitialized: false,
     secret: config.secret
 }))
+app.use(passport.initialize())
+app.use(passport.session())
 
-app.use('/graphql', graphqlHTTP(req => ({
-  schema,
-  context: { req },
-  rootValue: resolvers,
-  graphiql: true,
+app.use('/graphql', bodyParser.json(), graphqlHTTP(req => ({
+    schema: schema,
+    context: {
+        req
+    },
+    rootValue: resolvers,
+    graphiql: true,
 })))
 
 app.use('*', (req, res, next) => {
@@ -38,12 +53,11 @@ app.use('*', (req, res, next) => {
 })
 
 app.use((err, req, res) => {
-    if(err.status){
+    if (err.status) {
         res.status(404).json({
             message: 'Bad request. Wrong path'
         })
-    }
-    else {
+    } else {
         res.status(500).json({
             message: 'SERVER CRASHED'
         })
@@ -53,4 +67,3 @@ app.use((err, req, res) => {
 app.listen(config.port, (req, res) => {
     console.log(`SERVER UP AND RUNNING: localhost:${config.port}`)
 })
-
