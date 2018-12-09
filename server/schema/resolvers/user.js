@@ -1,6 +1,7 @@
 import { db } from '../../db/db'
-import { saltAndHashPassword } from '../../passport/passwordHelpers'
-import { authenticateUser } from '../../passport/authenticate'
+import jsonwebtoken from 'jsonwebtoken'
+import { config } from '../../config'
+import { saltAndHashPassword, comparePasswords } from '../../helpers/passwordHelpers'
 
 export default {
   allUsers: async () => {
@@ -29,14 +30,14 @@ export default {
       return null;
     }
   },
-  isLoggedIn: async (_, { req: { session } }) => {
-    if(session.passport){
+  isLoggedIn: async (_, context) => {
+    console.log(context.user)
+    if(context.user){
       return true
     }
     return false
   },
-  register: async ({ username, password, email }, { req }) => {
-    try {
+  register: async ({ username, password, email }, context) => {
       const newUser = await db
         .into("user")
         .returning(["username", "email", "id"])
@@ -52,9 +53,20 @@ export default {
           return err;
         });
 
-      authenticateUser(req, username, password)
-    } catch (err) {
-      return err;
+      return jsonwebtoken.sign(
+        {...newUser}, 
+        config.jwtSecret, 
+        { expiresIn: '1y' })
+  },
+  login: async ({ username, password }, context) => {
+    const validPassword = await comparePasswords(username, password)
+    if(validPassword) {
+      return jsonwebtoken.sign(
+        {...validPassword},
+        config.jwtSecret,
+        { expiresIn: '1d' }
+      )
     }
+    return 'INVALID USERNAME OR PASSWORD'
   }
 };

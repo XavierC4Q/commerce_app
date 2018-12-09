@@ -1,5 +1,5 @@
 import express from 'express'
-import passport from 'passport'
+import jwt from 'express-jwt'
 import {
     config
 } from './config'
@@ -20,7 +20,9 @@ const {
     types,
     resolvers
 } = graphqlSchema
+
 const app = express()
+const authenticate = jwt({ secret: config.jwtSecret, credentialsRequired: false })
 const schema = buildSchema(types)
 
 app.use(morgan('dev'))
@@ -29,18 +31,14 @@ app.use(bodyParser.urlencoded({
     extended: false
 }))
 app.use(cookieParser())
-app.use(session({
-    resave: false,
-    saveUninitialized: false,
-    secret: config.secret
-}))
-app.use(passport.initialize())
-app.use(passport.session())
 
-app.use('/graphql', bodyParser.json(), graphqlHTTP(req => ({
+app.use('/graphql', 
+bodyParser.json(),
+authenticate,
+graphqlHTTP(req => ({
     schema: schema,
     context: {
-        req
+        ...req
     },
     rootValue: resolvers,
     graphiql: true,
