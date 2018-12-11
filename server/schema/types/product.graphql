@@ -1,0 +1,22 @@
+enum ProductCategory {
+    FOOTWEAR
+    TOP
+    BOTTOM
+    OUTERWEAR
+    ACCESSORY
+}
+
+type Product {
+    id: ID!
+    product_name: String!
+    category: ProductCategory!
+}
+
+type Query {
+    allProducts: [Product!]
+    productsByCategory(category: ProductCategory!): [Product!]
+}
+
+type Mutation {
+    addProduct(product_name: String!, category: ProductCategory!): Boolean!
+}

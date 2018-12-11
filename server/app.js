@@ -1,5 +1,5 @@
 import express from 'express'
-import jwt from 'express-jwt'
+import jsonwebtoken from 'jsonwebtoken'
 import {
     config
 } from './config'
@@ -13,7 +13,6 @@ import graphqlHTTP from 'express-graphql'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
-import session from 'express-session'
 import morgan from 'morgan'
 
 const {
@@ -22,8 +21,19 @@ const {
 } = graphqlSchema
 
 const app = express()
-const authenticate = jwt({ secret: config.jwtSecret, credentialsRequired: false })
 const schema = buildSchema(types)
+
+const verifyToken = (req, res, next) => {
+    const tokenPresent = req.headers['authorization']
+    if(tokenPresent){
+        jsonwebtoken.verify(tokenPresent, config.jwtSecret, (err, valid) => {
+            if(valid){
+                req.user = valid
+            }
+        })
+    }
+    next()
+}
 
 app.use(morgan('dev'))
 app.use(cors())
@@ -34,12 +44,10 @@ app.use(cookieParser())
 
 app.use('/graphql', 
 bodyParser.json(),
-authenticate,
+verifyToken,
 graphqlHTTP(req => ({
     schema: schema,
-    context: {
-        ...req
-    },
+    context: { user: req.user },
     rootValue: resolvers,
     graphiql: true,
 })))

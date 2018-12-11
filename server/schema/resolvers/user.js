@@ -1,7 +1,14 @@
-import { db } from '../../db/db'
+import {
+  db
+} from '../../db/db'
 import jsonwebtoken from 'jsonwebtoken'
-import { config } from '../../config'
-import { saltAndHashPassword, comparePasswords } from '../../helpers/passwordHelpers'
+import {
+  config
+} from '../../config'
+import {
+  saltAndHashPassword,
+  comparePasswords
+} from '../../helpers/passwordHelpers'
 
 export default {
   allUsers: async () => {
@@ -16,12 +23,14 @@ export default {
       });
     return allUsersDB;
   },
-  getUser: async ({ username }) => {
+  getUser: async ({
+    id
+  }) => {
     try {
       const singleUser = await db
         .select("*")
         .from("user")
-        .where({ username: username })
+        .where('id', id)
         .then(rows => {
           return rows[0];
         });
@@ -30,43 +39,70 @@ export default {
       return null;
     }
   },
-  isLoggedIn: async (_, context) => {
-    console.log(context.user)
-    if(context.user){
-      return true
-    }
-    return false
+  register: async ({
+    username,
+    password,
+    email
+  }) => {
+    const newUser = await db
+      .into("user")
+      .returning(["username", "email", "id"])
+      .insert({
+        username: username,
+        password: saltAndHashPassword(password),
+        email: email
+      })
+      .then(rows => {
+        return rows[0];
+      })
+      .catch(err => {
+        return err;
+      });
+    return jsonwebtoken.sign({ ...newUser
+      },
+      config.jwtSecret, {
+        expiresIn: '1y'
+      })
   },
-  register: async ({ username, password, email }, context) => {
-      const newUser = await db
-        .into("user")
-        .returning(["username", "email", "id"])
-        .insert({
-          username: username,
-          password: saltAndHashPassword(password),
-          email: email
-        })
-        .then(rows => {
-          return rows[0];
-        })
-        .catch(err => {
-          return err;
-        });
-
-      return jsonwebtoken.sign(
-        {...newUser}, 
-        config.jwtSecret, 
-        { expiresIn: '1y' })
-  },
-  login: async ({ username, password }, context) => {
+  login: async ({
+    username,
+    password
+  }) => {
     const validPassword = await comparePasswords(username, password)
-    if(validPassword) {
-      return jsonwebtoken.sign(
-        {...validPassword},
-        config.jwtSecret,
-        { expiresIn: '1d' }
+    if (validPassword) {
+      return jsonwebtoken.sign({ ...validPassword
+        },
+        config.jwtSecret, {
+          expiresIn: '1d'
+        }
       )
     }
     return 'INVALID USERNAME OR PASSWORD'
+  },
+  editUser: async ({
+    id,
+    username,
+    password,
+    email
+  }) => {
+    if (password) {
+      password = saltAndHashPassword(password)
+    }
+
+    const updatedUser = await db('user')
+      .where('id', id)
+      .update({
+        username,
+        password,
+        email
+      })
+      .then(() => {
+        return true
+      })
+      .catch(() => {
+        return false
+      })
+
+    return updatedUser
   }
 };

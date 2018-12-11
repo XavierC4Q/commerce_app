@@ -9,11 +9,10 @@ type Query {
     allUsers: [User]
     getCurrentUser: User
     getUser(username: String!): User
-    isLoggedIn: Boolean!
 }
 
 type Mutation {
     login(username: String!, password: String!): String
     register(username: String!, password: String!, email: String!): String
-    editUser(username: String, password: String, email: String): Boolean!
+    editUser(id: ID!, username: String, password: String, email: String): Boolean!
 }
