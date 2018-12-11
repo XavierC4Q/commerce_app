@@ -1,0 +1,18 @@
+enum SubCategory {
+    CASUAL
+    SNEAKER
+    BOOT
+    DRESS
+}
+
+type Footwear {
+    id: ID!
+    product_id: Int!
+    product_name: String!
+    sub_category: SubCategory!
+}
+
+type Query {
+    allFootwearBySubCategory(sub_category: SubCategory!): [Footwear]
+    getFootwearByProductID(product_id: Int!): Footwear
+}

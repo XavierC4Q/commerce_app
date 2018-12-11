@@ -14,5 +14,5 @@ type Query {
 type Mutation {
     login(username: String!, password: String!): String
     register(username: String!, password: String!, email: String!): String
-    editUser(id: ID!, username: String, password: String, email: String): Boolean!
+    editUser(username: String, password: String, email: String): Boolean!
 }

@@ -53,16 +53,17 @@ export default {
         email: email
       })
       .then(rows => {
-        return rows[0];
+        return jsonwebtoken.sign({ ...rows[0]
+        },
+        config.jwtSecret, {
+          expiresIn: '1y'
+        })
       })
       .catch(err => {
         return err;
       });
-    return jsonwebtoken.sign({ ...newUser
-      },
-      config.jwtSecret, {
-        expiresIn: '1y'
-      })
+
+      return newUser
   },
   login: async ({
     username,

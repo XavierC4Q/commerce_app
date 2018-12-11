@@ -29,13 +29,19 @@ export default {
     },
     addProduct: async ({ product_name, category }) => {
         const insertProduct = await db
-        .into('product')
+        .into("product")
+        .returning(["id"])
         .insert({
             product_name: product_name,
             category: category
         })
+        .then(rows => {
+            return true
+        })
+        .catch(err => {
+            return false
+        })
 
-         console.log(insertProduct)
-         return false
+        return insertProduct
     }
 }
