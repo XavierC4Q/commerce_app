@@ -1,4 +1,6 @@
-import knex from "knex";
-import * as knexConfig from "../knexfile";
+import * as pgp from 'pg-promise'
+import { config } from '../config'
 
-export const db = knex(knexConfig);
+export const db = pgp()(config.db)
+
+
