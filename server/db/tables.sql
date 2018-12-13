@@ -36,14 +36,34 @@ CREATE TABLE sneakers (
 
 CREATE OR REPLACE FUNCTION product_deleted()
 RETURNS trigger
-AS $$
-DECLARE get_category TEXT;
+AS $product_delete_func$
+DECLARE get_category TEXT; get_sub_category TEXT;
 BEGIN
-    get_category := (SELECT LOWER(category) AS cat FROM products WHERE id = OLD.id);
-    EXECUTE format('DELETE FROM %1$I WHERE product_id = CAST(%2$s AS FLOAT)', get_category, OLD.id);
+    get_category := (SELECT LOWER(category) 
+        FROM products 
+        WHERE id = OLD.id);
+
+    EXECUTE format('CREATE TEMP TABLE findSubCategory
+        ON COMMIT DROP 
+        AS SELECT sub_category FROM %1$I
+        WHERE product_id = CAST(%2$s AS FLOAT)',
+        get_category, OLD.id);
+
+    get_sub_category := (SELECT LOWER(sub_category)
+        AS sub_cat
+        FROM findSubCategory);
+
+    EXECUTE format('DELETE FROM %1$I
+        WHERE product_id = CAST(%2$s AS FLOAT)',
+        get_sub_category, OLD.id);
+
+    EXECUTE format('DELETE FROM %1$I 
+        WHERE product_id = CAST(%2$s AS FLOAT)', 
+        get_category, OLD.id);
+
     RETURN OLD;
 END;
-$$ LANGUAGE plpgsql;
+$product_delete_func$ LANGUAGE plpgsql;
 
 CREATE TRIGGER product_deleted_trigger
 BEFORE DELETE
