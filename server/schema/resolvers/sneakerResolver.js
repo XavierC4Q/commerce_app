@@ -18,7 +18,7 @@ export default {
   },
   getSneakersBySize: async ({ size }) => {
     try {
-      return await db.any(queries.getSneakersBySize, [size.toString()]);
+      return await db.any(queries.getSneakersBySize, [size]);
     } catch (err) {
       return err;
     }
