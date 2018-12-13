@@ -1,6 +1,7 @@
-import * as pgp from 'pg-promise'
+import pgp from 'pg-promise'
 import { config } from '../config'
 
-export const db = pgp()(config.db)
+const connection = pgp({})
+export const db = connection(config.db)
 
 

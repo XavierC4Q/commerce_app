@@ -7,12 +7,11 @@ type User {
 
 type Query {
     allUsers: [User]
-    getCurrentUser: User
     getUser(username: String!): User
 }
 
 type Mutation {
     login(username: String!, password: String!): String
     register(username: String!, password: String!, email: String!): String
-    editUser(username: String, password: String, email: String): Boolean!
+    editUser(username: String, password: String, email: String id: ID!): Boolean!
 }
