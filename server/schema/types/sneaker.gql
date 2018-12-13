@@ -15,4 +15,3 @@ type Query {
     getSneakersBySize(size: Float!): [Sneaker]
     getSneakersByColor(color: String!): [Sneaker]
 }
-

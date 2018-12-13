@@ -1,7 +1,7 @@
 enum SubCategory {
     CASUAL
-    SNEAKER
-    BOOT
+    SNEAKERS
+    BOOTS
     DRESS
 }
 
