@@ -10,17 +10,14 @@ import {
 export default {
   allUsers: async () => {
     try {
-      const allUsersDB = await db.any(queries.allUsers);
-
-      return allUsersDB;
+      return await db.any(queries.allUsers);
     } catch (err) {
       return err;
     }
   },
   getUser: async ({ username }) => {
     try {
-      const singleUser = await db.one(queries.getUserByUsername, [username]);
-      return singleUser;
+      return await db.one(queries.getUserByUsername, [username]);
     } catch (err) {
       return null;
     }

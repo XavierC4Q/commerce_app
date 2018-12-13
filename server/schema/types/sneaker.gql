@@ -1,0 +1,18 @@
+type Sneaker {
+    id: ID!
+    product_id: Int!
+    product_name: String!
+    male: Boolean!
+    female: Boolean!
+    child: Boolean!
+    sizes: [Float!]!
+    colors: [String!]!
+}
+
+type Query {
+    allSneakers: [Sneaker!]!
+    getSneaker(product_id: Int!): Sneaker
+    getSneakersBySize(size: Float!): [Sneaker]
+    getSneakersByColor(color: String!): [Sneaker]
+}
+

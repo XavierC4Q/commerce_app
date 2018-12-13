@@ -83,6 +83,6 @@ VALUES
 
 INSERT INTO sneakers (product_name, product_id, male, female, child, sizes, colors)
 VALUES
-('Air Jordan 6', 1, true, true, true, '{2, 2.5, 4.5, 5, 5.5, 8, 9.5, 11}', '{"Red", "Blue", "Yellow"}'),
-('Adidas Boost', 8, true, false, false, '{7.5, 8.5, 10, 10.5, 12, 13}', '{"Green", "Gold"}'),
-('Golden Cleats', 23, true, false, false, '{9.5, 10.5, 11, 11.5}', '{"Orange", "Purple"}');
+('Air Jordan 6', 1, true, true, true, '{2, 2.5, 4.5, 5, 5.5, 8, 9.5, 11}', '{"RED", "BLUE", "YELLOW"}'),
+('Adidas Boost', 8, true, false, false, '{7.5, 8.5, 10, 10.5, 12, 13}', '{"GREEN", "GOLD"}'),
+('Golden Cleats', 23, true, false, false, '{9.5, 10.5, 11, 11.5}', '{"ORANGE", "PURPLE"}');
