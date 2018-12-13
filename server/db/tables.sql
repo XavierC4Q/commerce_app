@@ -30,9 +30,27 @@ CREATE TABLE sneakers (
     male BOOLEAN NOT NULL,
     female BOOLEAN NOT NULL,
     child BOOLEAN NOT NULL,
-    sizes TEXT[],
+    sizes FLOAT[],
     colors TEXT[]
 );
+
+CREATE OR REPLACE FUNCTION product_deleted()
+RETURNS trigger
+AS $$
+DECLARE get_category TEXT;
+BEGIN
+    get_category := (SELECT LOWER(category) AS cat FROM products WHERE id = OLD.id);
+    EXECUTE format('DELETE FROM %1$I WHERE product_id = CAST(%2$s AS FLOAT)', get_category, OLD.id);
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER product_deleted_trigger
+BEFORE DELETE
+ON products
+FOR EACH ROW
+EXECUTE PROCEDURE product_deleted();
+
 
 INSERT INTO users (username, password, email) 
 VALUES
@@ -72,14 +90,14 @@ VALUES
 
 INSERT INTO footwear (product_id, product_name, sub_category)
 VALUES
-(1, 'Air Jordan 6', 'SNEAKER'),
-(4, 'Snake Leather Boots', 'BOOT'),
-(8, 'Adidas Boost', 'SNEAKER'),
+(1, 'Air Jordan 6', 'SNEAKERS'),
+(4, 'Snake Leather Boots', 'BOOTS'),
+(8, 'Adidas Boost', 'SNEAKERS'),
 (12, 'Brogues', 'DRESS'),
-(17, 'Doc Marten Deluxe', 'BOOT'),
+(17, 'Doc Marten Deluxe', 'BOOTS'),
 (18, 'Glass Slippers', 'CASUAL'),
-(23, 'Golden Cleats', 'SNEAKER'),
-(25, 'Chelsea Boots', 'BOOT');
+(23, 'Golden Cleats', 'SNEAKERS'),
+(25, 'Chelsea Boots', 'BOOTS');
 
 INSERT INTO sneakers (product_name, product_id, male, female, child, sizes, colors)
 VALUES
