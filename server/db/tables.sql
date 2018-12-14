@@ -2,30 +2,32 @@ DROP DATABASE IF EXISTS commerce_app;
 CREATE DATABASE commerce_app;
 
 \c commerce_app
-
+--- Users Table
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username VARCHAR NOT NULL UNIQUE,
     email VARCHAR NOT NULL UNIQUE,
     password VARCHAR NOT NULL
 );
-
+--- Products Table
 CREATE TABLE products (
     id SERIAL PRIMARY KEY,
     product_name TEXT NOT NULL UNIQUE,
     category TEXT NOT NULL
 );
-
+--- Footwear Table References to Products
+--- product_name deferred immediately to allow for potential updates
 CREATE TABLE footwear (
     id SERIAL PRIMARY KEY,
     product_id INTEGER REFERENCES products (id) UNIQUE,
-    product_name TEXT REFERENCES products (product_name) UNIQUE,
+    product_name TEXT REFERENCES products (product_name) DEFERRABLE INITIALLY IMMEDIATE UNIQUE,
     sub_category TEXT NOT NULL
 );
-
+--- Sneakers Table
+--- product_name deferred immediately to allow for potential changes
 CREATE TABLE sneakers (
     id SERIAL PRIMARY KEY,
-    product_name TEXT REFERENCES footwear (product_name) UNIQUE,
+    product_name TEXT REFERENCES footwear (product_name) DEFERRABLE INITIALLY IMMEDIATE UNIQUE,
     product_id INTEGER REFERENCES footwear (product_id),
     male BOOLEAN NOT NULL,
     female BOOLEAN NOT NULL,
@@ -33,26 +35,30 @@ CREATE TABLE sneakers (
     sizes FLOAT[],
     colors TEXT[]
 );
-
+--- Function for deleting product and all relations
 CREATE OR REPLACE FUNCTION product_deleted()
 RETURNS trigger
 AS $product_delete_func$
 DECLARE get_category TEXT; get_sub_category TEXT;
 BEGIN
+
+--- Get the category of item to be deleted
     get_category := (SELECT LOWER(category) 
         FROM products 
         WHERE id = OLD.id);
 
+--- Create temporary table to get items sub_category using the category above
     EXECUTE format('CREATE TEMP TABLE findSubCategory
         ON COMMIT DROP 
         AS SELECT sub_category FROM %1$I
         WHERE product_id = CAST(%2$s AS FLOAT)',
         get_category, OLD.id);
 
+--- Get sub_category of item to be deleted
     get_sub_category := (SELECT LOWER(sub_category)
-        AS sub_cat
         FROM findSubCategory);
 
+-- Delete items in reverse order.
     EXECUTE format('DELETE FROM %1$I
         WHERE product_id = CAST(%2$s AS FLOAT)',
         get_sub_category, OLD.id);
@@ -65,13 +71,61 @@ BEGIN
 END;
 $product_delete_func$ LANGUAGE plpgsql;
 
+--- Function to update a product/product_name and all relations
+CREATE OR REPLACE FUNCTION product_updated()
+RETURNS trigger
+AS $product_updated_func$
+DECLARE update_in_category TEXT; update_in_sub_category TEXT;
+BEGIN
+--- Defer foreign key constraints to allow for UPDATE
+SET CONSTRAINTS ALL DEFERRED;
+
+--- Get category of item to be updated
+    update_in_category := (SELECT LOWER(category)
+        FROM products
+        WHERE id = NEW.id);
+
+--- Create temporary table with the sub_category of the updated item using the category
+    EXECUTE format('CREATE TEMP TABLE findSubCategory
+        ON COMMIT DROP
+        AS SELECT sub_category FROM %1$I
+        WHERE product_id = CAST(%2$s AS FLOAT)',
+        update_in_category, NEW.id);
+
+--- Get the sub_category from above table
+    update_in_sub_category := (SELECT LOWER(sub_category)
+        FROM findSubCategory);
+
+--- Update the tables in order
+    EXECUTE format('UPDATE %1$I
+        SET product_name = %2$L
+        WHERE product_id = CAST(%3$s AS FLOAT)',
+        update_in_category, NEW.product_name, NEW.id);
+
+    EXECUTE format('UPDATE %1$I
+        SET product_name = %2$L
+        WHERE product_id = CAST(%3$s AS FLOAT)',
+        update_in_sub_category, NEW.product_name, NEW.id);
+
+    RETURN NEW;
+END;
+$product_updated_func$ LANGUAGE plpgsql;
+
+
+--- Triggers
 CREATE TRIGGER product_deleted_trigger
 BEFORE DELETE
 ON products
 FOR EACH ROW
 EXECUTE PROCEDURE product_deleted();
 
+CREATE TRIGGER product_updated_trigger
+BEFORE UPDATE
+ON products
+FOR EACH ROW
+EXECUTE PROCEDURE product_updated();
 
+--- Inserts
 INSERT INTO users (username, password, email) 
 VALUES
 ('Xavier','$2a$10$cP5yvGxHTDI9SChQinrYBehqMLO8qs.U.3xLuWn5MRX.ZrtbC9CyC','email'),
