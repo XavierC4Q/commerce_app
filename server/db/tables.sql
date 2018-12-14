@@ -33,7 +33,21 @@ CREATE TABLE sneakers (
     female BOOLEAN NOT NULL,
     child BOOLEAN NOT NULL,
     sizes FLOAT[],
-    colors TEXT[]
+    colors TEXT[],
+    price FLOAT NOT NULL
+);
+--- Boots Table
+--- product_name deferred immediately to allow for potential changes
+CREATE TABLE boots (
+    id SERIAL PRIMARY KEY,
+    product_name TEXT REFERENCES footwear (product_name) DEFERRABLE INITIALLY IMMEDIATE UNIQUE,
+    product_id INTEGER REFERENCES footwear (product_id),
+    male BOOLEAN NOT NULL,
+    female BOOLEAN NOT NULL,
+    child BOOLEAN NOT NULL,
+    sizes FLOAT[],
+    colors TEXT[],
+    price FLOAT NOT NULL
 );
 --- Function for deleting product and all relations
 CREATE OR REPLACE FUNCTION product_deleted()
@@ -173,8 +187,14 @@ VALUES
 (23, 'Golden Cleats', 'SNEAKERS'),
 (25, 'Chelsea Boots', 'BOOTS');
 
-INSERT INTO sneakers (product_name, product_id, male, female, child, sizes, colors)
+INSERT INTO sneakers (product_name, product_id, male, female, child, sizes, colors, price)
 VALUES
-('Air Jordan 6', 1, true, true, true, '{2, 2.5, 4.5, 5, 5.5, 8, 9.5, 11}', '{"RED", "BLUE", "YELLOW"}'),
-('Adidas Boost', 8, true, false, false, '{7.5, 8.5, 10, 10.5, 12, 13}', '{"GREEN", "GOLD"}'),
-('Golden Cleats', 23, true, false, false, '{9.5, 10.5, 11, 11.5}', '{"ORANGE", "PURPLE"}');
+('Air Jordan 6', 1, true, true, true, '{2, 2.5, 4.5, 5, 5.5, 8, 9.5, 11}', '{"RED", "BLUE", "YELLOW"}', 200.25),
+('Adidas Boost', 8, true, false, false, '{7.5, 8.5, 10, 10.5, 12, 13}', '{"GREEN", "GOLD"}', 85.50),
+('Golden Cleats', 23, true, false, false, '{9.5, 10.5, 11, 11.5}', '{"ORANGE", "PURPLE"}', 110.25);
+
+INSERT INTO boots (product_name, product_id, male, female, child, sizes, colors, price)
+VALUES 
+('Snake Leather Boots', 4, false, true, false, '{5.5, 7.5, 8, 8.5}', '{"BROWN", "RAINFOREST GREEN"}', 350),
+('Doc Marten Deluxe', 17, true, true, false, '{6.5, 7, 8, 9, 9.5, 10}', '{"RED", "BROWN", "DUCK YELLOW"}', 175.75),
+('Chelsea Boots', 25, true, false, false, '{9.5, 10, 10.5, 12}', '{"DESERT TAN", "GREY"}', 80.50);

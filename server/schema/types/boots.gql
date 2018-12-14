@@ -1,0 +1,17 @@
+type Boots {
+    id: ID!
+    product_id: Int!
+    product_name: String!
+    male: Boolean!
+    female: Boolean!
+    child: Boolean!
+    sizes: [Float!]!
+    colors: [String!]!
+}
+
+type Query {
+    allBoots: [Boots!]!
+    getBoot(product_id: Int!): Boots
+    getBootsBySize(size: Float!): [Boots]
+    getBootsByColor(color: String!): [Boots]
+}
