@@ -1,4 +1,6 @@
-import { db } from "../../db/db";
+import {
+  db
+} from "../../db/db";
 import * as queries from "../../db/queries/products";
 
 export default {
@@ -9,7 +11,9 @@ export default {
       return err;
     }
   },
-  productsByCategory: async ({ category }) => {
+  productsByCategory: async ({
+    category
+  }) => {
     try {
       return await db.any(
         queries.getProductsByCategory,
@@ -19,7 +23,10 @@ export default {
       return err;
     }
   },
-  addProduct: async ({ product_name, category }) => {
+  addProduct: async ({
+    product_name,
+    category
+  }) => {
     try {
       await db.one(queries.addProduct, [
         product_name,
@@ -28,6 +35,27 @@ export default {
       return true;
     } catch (err) {
       return false;
+    }
+  },
+  removeProduct: async ({
+    product_id
+  }) => {
+    try {
+      await db.none(queries.deleteProduct, [product_id])
+      return true
+    } catch (err) {
+      return false
+    }
+  },
+  updateProduct: async ({
+    product_id,
+    product_name
+  }) => {
+    try {
+      await db.none(queries.updateProductName, [product_name, product_id])
+      return true
+    } catch (err) {
+      return false
     }
   }
 };

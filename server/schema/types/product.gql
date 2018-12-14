@@ -19,4 +19,6 @@ type Query {
 
 type Mutation {
     addProduct(product_name: String!, category: ProductCategory!): Boolean!
+    removeProduct(product_id: Int!): Boolean!
+    updateProduct(product_id: Int!, product_name: String!): Boolean!
 }
