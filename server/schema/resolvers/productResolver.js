@@ -1,7 +1,7 @@
 import {
   db
 } from "../../db/db";
-import * as queries from "../../db/queries/products";
+import * as queries from "../../db/queries/footwear_queries/products";
 
 export default {
   allProducts: async () => {

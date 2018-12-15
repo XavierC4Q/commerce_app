@@ -2,7 +2,7 @@ enum SubCategory {
     CASUAL
     SNEAKERS
     BOOTS
-    DRESS
+    DRESS_SHOE
 }
 
 type Footwear {

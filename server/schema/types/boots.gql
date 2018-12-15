@@ -7,6 +7,7 @@ type Boots {
     child: Boolean!
     sizes: [Float!]!
     colors: [String!]!
+    price: Int!
 }
 
 type Query {

@@ -1,0 +1,18 @@
+type DressShoe {
+    id: ID!
+    product_id: Int!
+    product_name: String!
+    male: Boolean!
+    female: Boolean!
+    child: Boolean!
+    sizes: [Float!]!
+    colors: [String!]!
+    price: Int!
+}
+
+type Query {
+    allDressShoes: [DressShoe!]!
+    getDressShoe(product_id: Int!): DressShoe
+    getDressShoesBySize(size: Float!): [DressShoe]
+    getDressShoesByColor(color: String!): [DressShoe]
+}

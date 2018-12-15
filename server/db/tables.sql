@@ -49,6 +49,19 @@ CREATE TABLE boots (
     colors TEXT[],
     price FLOAT NOT NULL
 );
+--- Dress Shoes Table
+--- product_name deferred immediately to allow for potential changes
+CREATE TABLE dress_shoe (
+    id SERIAL PRIMARY KEY,
+    product_name TEXT REFERENCES footwear (product_name) DEFERRABLE INITIALLY IMMEDIATE UNIQUE,
+    product_id INTEGER REFERENCES footwear (product_id),
+    male BOOLEAN NOT NULL,
+    female BOOLEAN NOT NULL,
+    child BOOLEAN NOT NULL,
+    sizes FLOAT[],
+    colors TEXT[],
+    price FLOAT NOT NULL
+);
 --- Function for deleting product and all relations
 CREATE OR REPLACE FUNCTION product_deleted()
 RETURNS trigger
@@ -181,7 +194,7 @@ VALUES
 (1, 'Air Jordan 6', 'SNEAKERS'),
 (4, 'Snake Leather Boots', 'BOOTS'),
 (8, 'Adidas Boost', 'SNEAKERS'),
-(12, 'Brogues', 'DRESS'),
+(12, 'Brogues', 'DRESS_SHOE'),
 (17, 'Doc Marten Deluxe', 'BOOTS'),
 (18, 'Glass Slippers', 'CASUAL'),
 (23, 'Golden Cleats', 'SNEAKERS'),
@@ -198,3 +211,7 @@ VALUES
 ('Snake Leather Boots', 4, false, true, false, '{5.5, 7.5, 8, 8.5}', '{"BROWN", "RAINFOREST GREEN"}', 350),
 ('Doc Marten Deluxe', 17, true, true, false, '{6.5, 7, 8, 9, 9.5, 10}', '{"RED", "BROWN", "DUCK YELLOW"}', 175.75),
 ('Chelsea Boots', 25, true, false, false, '{9.5, 10, 10.5, 12}', '{"DESERT TAN", "GREY"}', 80.50);
+
+INSERT INTO dress_shoe (product_name, product_id, male, female, child, sizes, colors, price)
+VALUES
+('Brogues', 12, true, false, false, '{9, 9.5, 10, 10.5, 11, 12}', '{"OXFORD RED", "BLACK"}', 120.25);
