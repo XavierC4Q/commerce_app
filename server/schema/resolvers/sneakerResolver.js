@@ -13,21 +13,21 @@ export default {
     try {
       return await db.one(queries.getSingleSneaker, [product_id]);
     } catch (err) {
-      return err;
+      return null;
     }
   },
   getSneakersBySize: async ({ size }) => {
     try {
       return await db.any(queries.getSneakersBySize, [size]);
     } catch (err) {
-      return err;
+      return null;
     }
   },
   getSneakersByColor: async ({ color }) => {
     try {
       return await db.any(queries.getSneakersByColors, [color.toUpperCase()]);
     } catch (err) {
-      return err;
+      return null;
     }
   }
 };

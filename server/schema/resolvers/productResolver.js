@@ -20,7 +20,7 @@ export default {
         [category]
       );
     } catch (err) {
-      return err;
+      return null;
     }
   },
   addProduct: async ({

@@ -13,21 +13,21 @@ export default {
     try {
       return await db.one(queries.getSingleBoot, [product_id]);
     } catch (err) {
-      return err;
+      return null;
     }
   },
   getBootsBySize: async ({ size }) => {
     try {
       return await db.any(queries.getBootsBySize, [size]);
     } catch (err) {
-      return err;
+      return null;
     }
   },
   getBootsByColor: async ({ color }) => {
     try {
       return await db.any(queries.getBootsByColors, [color.toUpperCase()]);
     } catch (err) {
-      return err;
+      return null;
     }
   }
 };

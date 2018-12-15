@@ -9,7 +9,7 @@ export default {
         [subCategory]
       );
     } catch (err) {
-      return err;
+      return null;
     }
   },
   getFootwearByProductID: async ({ product_id }) => {
