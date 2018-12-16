@@ -1,5 +1,5 @@
-import { db } from "../../db/db";
-import * as queries from "../../db/queries/footwear_queries/footwear";
+import { db } from "../../../db/db";
+import * as queries from "../../../db/queries/footwear_queries/footwear";
 
 export default {
   allFootwearBySubCategory: async ({ subCategory }) => {

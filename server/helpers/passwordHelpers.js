@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs'
 import { db } from '../db/db'
-import { getUserByUsername } from '../db/queries/users'
+import { getUserByUsername } from '../db/queries/user_queries/users'
 
 export const saltAndHashPassword = (password) => {
     const salt = bcrypt.genSaltSync(10)

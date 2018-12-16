@@ -1,11 +1,11 @@
-import { db } from "../../db/db";
+import { db } from "../../../db/db";
 import jsonwebtoken from "jsonwebtoken";
-import * as queries from "../../db/queries/users";
-import { config } from "../../config";
+import * as queries from "../../../db/queries/user_queries/users";
+import { config } from "../../../config";
 import {
   saltAndHashPassword,
   comparePasswords
-} from "../../helpers/passwordHelpers";
+} from "../../../helpers/passwordHelpers";
 
 export default {
   allUsers: async () => {

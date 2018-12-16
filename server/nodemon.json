@@ -3,7 +3,7 @@
     "ignore": [
       ".git",
       "node_modules/**/node_modules",
-      "schema/resolvers/bootResolver.js"
+      "schema/resolvers/footwear_resolvers/bootResolver.js"
     ],
     "verbose": true,
     "execMap": {
