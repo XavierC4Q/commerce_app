@@ -62,6 +62,7 @@ CREATE TABLE dress_shoe (
     colors TEXT[],
     price FLOAT NOT NULL
 );
+
 --- Function for deleting product and all relations
 CREATE OR REPLACE FUNCTION product_deleted()
 RETURNS trigger

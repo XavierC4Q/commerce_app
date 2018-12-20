@@ -1,0 +1,80 @@
+import {
+  db
+} from "../../../db/db";
+import * as queries from "../../../db/queries/product_queries/products";
+
+export default {
+  allProducts: async () => {
+    try {
+      return await db.any(queries.getAllProducts);
+    } catch (err) {
+      return err;
+    }
+  },
+  productsByCategory: async ({
+    category
+  }) => {
+    try {
+      return await db.any(
+        queries.getProductsByCategory,
+        [category]
+      );
+    } catch (err) {
+      return null;
+    }
+  },
+  removeProduct: async ({
+    product_id
+  }) => {
+    try {
+      await db.none(queries.deleteProduct, [product_id])
+      return true
+    } catch (err) {
+      return false
+    }
+  },
+  updateProduct: async ({
+    product_id,
+    product_name
+  }) => {
+    try {
+      await db.none(queries.updateProductName, [product_name, product_id])
+      return true
+    } catch (err) {
+      return false
+    }
+  },
+  addFootwearProduct: async ({
+    product_name,
+    sub_category,
+    male,
+    female,
+    child,
+    sizes,
+    colors,
+    price
+  }) => {
+    try {
+      // ADDS PRODUCT TO PRODUCT TABLE
+      const addProduct = await db.one(queries.addProduct, [product_name, 'FOOTWEAR'])
+      // ADDS PRODUCT TO FOOTWEAR TABLE
+      const addFootwear = await db.one(queries.addFootwear, [addProduct.id, product_name, sub_category])
+      // ADDS PRODUCT TO SUBCATEGORY TABLE OF FOOTWEAR
+      await db.one(queries.addFootwearSubCategory,
+        [
+        sub_category.toLowerCase(),
+        product_name,
+        addFootwear.product_id,
+        male,
+        female,
+        child,
+        sizes,
+        colors,
+        price
+        ])
+      return true
+    } catch (err) {
+      return false
+    }
+  }
+};

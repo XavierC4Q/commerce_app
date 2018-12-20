@@ -1,0 +1,17 @@
+enum TopCategory {
+    SWEATSHIRT
+    SHIRT
+    TANK_TOP
+    DRESS_SHIRT
+}
+
+type Top {
+    id: ID!
+    product_id: Int!
+    product_name: String!
+    sub_category: String!
+}
+
+type Query {
+    
+}
