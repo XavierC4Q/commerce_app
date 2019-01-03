@@ -31,10 +31,7 @@ CREATE TABLE sneakers (
     product_id INTEGER REFERENCES footwear (product_id),
     male BOOLEAN NOT NULL,
     female BOOLEAN NOT NULL,
-    child BOOLEAN NOT NULL,
-    sizes FLOAT[],
-    colors TEXT[],
-    price FLOAT NOT NULL
+    child BOOLEAN NOT NULL
 );
 --- Boots Table
 --- product_name deferred immediately to allow for potential changes
@@ -44,10 +41,7 @@ CREATE TABLE boots (
     product_id INTEGER REFERENCES footwear (product_id),
     male BOOLEAN NOT NULL,
     female BOOLEAN NOT NULL,
-    child BOOLEAN NOT NULL,
-    sizes FLOAT[],
-    colors TEXT[],
-    price FLOAT NOT NULL
+    child BOOLEAN NOT NULL
 );
 --- Dress Shoes Table
 --- product_name deferred immediately to allow for potential changes
@@ -57,10 +51,25 @@ CREATE TABLE dress_shoe (
     product_id INTEGER REFERENCES footwear (product_id),
     male BOOLEAN NOT NULL,
     female BOOLEAN NOT NULL,
-    child BOOLEAN NOT NULL,
-    sizes FLOAT[],
-    colors TEXT[],
-    price FLOAT NOT NULL
+    child BOOLEAN NOT NULL
+);
+
+CREATE TABLE product_sizes (
+    id SERIAL PRIMARY KEY,
+    product_id INTEGER REFERENCES products (id),
+    sizes TEXT []
+);
+
+CREATE TABLE product_colors (
+    id SERIAL PRIMARY KEY,
+    product_id INTEGER REFERENCES products (id),
+    colors TEXT []
+);
+
+CREATE TABLE prices (
+    id SERIAL PRIMARY KEY,
+    product_id INTEGER REFERENCES products (id),
+    price FLOAT
 );
 
 --- Function for deleting product and all relations
@@ -201,18 +210,84 @@ VALUES
 (23, 'Golden Cleats', 'SNEAKERS'),
 (25, 'Chelsea Boots', 'BOOTS');
 
-INSERT INTO sneakers (product_name, product_id, male, female, child, sizes, colors, price)
+INSERT INTO sneakers (product_name, product_id, male, female, child)
 VALUES
-('Air Jordan 6', 1, true, true, true, '{2, 2.5, 4.5, 5, 5.5, 8, 9.5, 11}', '{"RED", "BLUE", "YELLOW"}', 200.25),
-('Adidas Boost', 8, true, false, false, '{7.5, 8.5, 10, 10.5, 12, 13}', '{"GREEN", "GOLD"}', 85.50),
-('Golden Cleats', 23, true, false, false, '{9.5, 10.5, 11, 11.5}', '{"ORANGE", "PURPLE"}', 110.25);
+('Air Jordan 6', 1, true, true, true),
+('Adidas Boost', 8, true, false, false),
+('Golden Cleats', 23, true, false, false);
 
-INSERT INTO boots (product_name, product_id, male, female, child, sizes, colors, price)
+INSERT INTO boots (product_name, product_id, male, female, child)
 VALUES 
-('Snake Leather Boots', 4, false, true, false, '{5.5, 7.5, 8, 8.5}', '{"BROWN", "RAINFOREST GREEN"}', 350),
-('Doc Marten Deluxe', 17, true, true, false, '{6.5, 7, 8, 9, 9.5, 10}', '{"RED", "BROWN", "DUCK YELLOW"}', 175.75),
-('Chelsea Boots', 25, true, false, false, '{9.5, 10, 10.5, 12}', '{"DESERT TAN", "GREY"}', 80.50);
+('Snake Leather Boots', 4, false, true, false),
+('Doc Marten Deluxe', 17, true, true, false),
+('Chelsea Boots', 25, true, false, false);
 
-INSERT INTO dress_shoe (product_name, product_id, male, female, child, sizes, colors, price)
+INSERT INTO dress_shoe (product_name, product_id, male, female, child)
 VALUES
-('Brogues', 12, true, false, false, '{9, 9.5, 10, 10.5, 11, 12}', '{"OXFORD RED", "BLACK"}', 120.25);
+('Brogues', 12, true, false, false);
+
+INSERT INTO product_sizes (product_id, sizes)
+VALUES
+(1, '{7.5, 8, 9, 9.5, 10.5, 12}'),
+(2, '{S, M, L, XXL}'),
+(3, '{30, 31, 33, 34}'),
+(4, '{9.5, 12.5}'),
+(5, '{L, XL, XXL}'),
+(6, '{28, 30, 32}'),
+(7, '{M, L}'),
+(8, '{5.5, 6, 7.5, 8, 10}'),
+(9, '{30, 32, 33, 36}'),
+(10, '{L, XXL}'),
+(11, '{6, 7, 8}'),
+(12, '{9, 9.5, 11.5}'),
+(13, '{26, 28, 30}'),
+(14, '{XS, S, M, L}'),
+(15, '{L, XXL}'),
+(16, '{16, 17.5, 18.5}'),
+(17, '{7, 8, 10, 11}'),
+(18, '{3.5, 4.5, 5}'),
+(19, '{29, 32, 33, 34}'),
+(20, '{S, L}'),
+(21, '{15.5, 16, 16.5, 17.5}'),
+(22, '{M, L, XL}'),
+(23, '{10.5, 11.5, 13}'),
+(24, '{26, 28, 31, 32}'),
+(25, '{9.5, 10, 11}'),
+(26, '{XXS, XS, S, M}');
+
+INSERT INTO prices (product_id, price)
+VALUES
+(1, 260.50), (2, 50.00),(3, 99.85), (4, 155.25), (5, 635.50), (6, 500.00),
+(7, 45.50), (8, 135.00), (9, 65.35), (10, 250.45), (11, 300.50),
+(12, 125.50), (13, 25.00), (14, 55.55), (15, 120.25), (16, 21.50),
+(17, 145.00), (18, 66.75), (19, 74.30), (20, 98.75), (21, 750.99),
+(22, 365.75), (23, 233.00), (24, 135.65), (25, 85.60), (26, 45.00);
+
+INSERT INTO product_colors (product_id, colors)
+VALUES
+(1, '{"BLACK", "RED", "WHITE"}'),
+(2, '{"BLUE"}'),
+(3, '{"BLACK"}'),
+(4, '{"RATTLESNAKE GOLD", "DESERT TAN"}'),
+(5, '{"GREY", "BLACK", "BROWN"}'),
+(6, '{"WHITE", "GREEN", "BLACK"}'),
+(7, '{"NAVY", "RED", "BLACK"}'),
+(8, '{"BOOST YELLOW", "NEON", "FLASHY CRIMSON"}'),
+(9, '{"FOREST CAMO", "ARTIC CAMO"}'),
+(10, '{"YELLOW", "EAZY ORANGE"}'),
+(11, '{"SILVER", "WHITE GOLD"}'),
+(12, '{"BROWN", "BLACK", "ASH GREY"}'),
+(13, '{"ORANGE", "TYE-DIE"}'),
+(14, '{"RED", "GREEN", "PURPLE"}'),
+(15, '{"SKYBLUE", "GREEN"}'),
+(16, '{"BLACK"}'),
+(17, '{"SOOT", "EMERALD", "DUCK YELLOW"}'),
+(18, '{"LIGHT BLUE"}'),
+(19, '{"PURPLE"}'),
+(20, '{"YELLOW", "GREEN"}'),
+(21, '{"TAN"}'),
+(22, '{"BROWN", "BLACK"}'),
+(23, '{"GOLD"}'),
+(24, '{"FADED BLUE", "GREY"}'),
+(25, '{"TAN", "GREY"}'),
+(26, '{"ORANGE"}');

@@ -70,6 +70,6 @@ app.use((err, req, res) => {
     }
 })
 
-app.listen(config.port, (req, res) => {
+app.listen(config.port, () => {
     console.log(`SERVER UP AND RUNNING: localhost:${config.port}`)
 })

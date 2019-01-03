@@ -27,6 +27,13 @@ export default {
     product_id
   }) => {
     try {
+      // DELETE FROM PRICES TABLE
+      await db.none(queries.removeFromPrices, [product_id])
+      // DELETE FROM PRODUCT COLORS TABLE
+      await db.none(queries.removeFromProductColors, [product_id])
+      // DELETE FROM PRODUCT SIZES TABLE
+      await db.none(queries.removeFromProductSizes, [product_id])
+      // DELETE FROM PRODUCTS FINALLY
       await db.none(queries.deleteProduct, [product_id])
       return true
     } catch (err) {
@@ -67,13 +74,24 @@ export default {
         addFootwear.product_id,
         male,
         female,
-        child,
-        sizes,
-        colors,
-        price
+        child
         ])
+      // ADDS FOOTWEAR PRICE TO PRICES TABLE
+      await db.none(queries.insertIntoPrices, 
+        [addFootwear.product_id, 
+        price])
+      // ADDS FOOTWEAR COLORS TO PRODUCT_COLORS TABLE
+      await db.none(queries.insertIntoProductColors, 
+        [addFootwear.product_id, 
+        colors])
+      // ADDS FOOTWEAR SIZE TO PRODUCT_SIZES TABLE
+      await db.none(queries.insertIntoProductSizes, 
+        [addFootwear.product_id, 
+        sizes])
+        
       return true
     } catch (err) {
+      console.log(err)
       return false
     }
   }

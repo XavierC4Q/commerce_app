@@ -27,9 +27,33 @@ VALUES($1, $2, $3)
 RETURNING product_id, product_name`
 
 const addFootwearSubCategory = `
-INSERT INTO $1~ (product_name, product_id, male, female, child, sizes, colors, price)
-VALUES($2, $3, $4, $5, $6, $7, $8, $9)
-RETURNING id, product_name`
+INSERT INTO $1~ (product_name, product_id, male, female, child)
+VALUES($2, $3, $4, $5, $6)
+RETURNING id, product_id, product_name`
+
+const removeFromPrices = `
+DELETE FROM prices
+WHERE product_id = $1`
+
+const removeFromProductSizes = `
+DELETE FROM product_sizes
+WHERE product_id = $1`
+
+const removeFromProductColors = `
+DELETE FROM product_colors
+WHERE product_id = $1`
+
+const insertIntoPrices = `
+INSERT INTO prices (product_id, price)
+VALUES($1, $2)`
+
+const insertIntoProductColors = `
+INSERT INTO product_colors (product_id, colors)
+VALUES($1, $2)`
+
+const insertIntoProductSizes = `
+INSERT INTO product_sizes (product_id, sizes)
+VALUES($1, $2)`
 
 export {
     getAllProducts,
@@ -38,5 +62,11 @@ export {
     updateProductName,
     addProduct,
     addFootwear,
-    addFootwearSubCategory
+    addFootwearSubCategory,
+    removeFromPrices,
+    removeFromProductSizes,
+    removeFromProductColors,
+    insertIntoPrices,
+    insertIntoProductColors,
+    insertIntoProductSizes
 }
