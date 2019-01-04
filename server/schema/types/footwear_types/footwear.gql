@@ -1,4 +1,4 @@
-enum SubCategory {
+enum FootwearSubCategory {
     CASUAL
     SNEAKERS
     BOOTS
@@ -9,10 +9,10 @@ type Footwear {
     id: ID!
     product_id: Int!
     product_name: String!
-    sub_category: SubCategory!
+    sub_category: FootwearSubCategory!
 }
 
 type Query {
-    allFootwearBySubCategory(sub_category: SubCategory!): [Footwear]
+    allFootwearBySubCategory(sub_category: FootwearSubCategory!): [Footwear]
     getFootwearByProductID(product_id: Int!): Footwear
 }

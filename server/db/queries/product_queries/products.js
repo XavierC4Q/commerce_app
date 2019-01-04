@@ -55,6 +55,21 @@ const insertIntoProductSizes = `
 INSERT INTO product_sizes (product_id, sizes)
 VALUES($1, $2)`
 
+const updatePrice = `
+UPDATE prices
+SET price = $1
+WHERE product_id = $2`
+
+const updateProductSize = `
+UPDATE product_sizes
+SET sizes = $1
+WHERE product_id = $2`
+
+const updateProductColor = `
+UPDATE product_colors
+SET colors = $1
+WHERE product_id = $2`
+
 export {
     getAllProducts,
     getProductsByCategory,
@@ -68,5 +83,8 @@ export {
     removeFromProductColors,
     insertIntoPrices,
     insertIntoProductColors,
-    insertIntoProductSizes
+    insertIntoProductSizes,
+    updatePrice,
+    updateProductSize,
+    updateProductColor
 }

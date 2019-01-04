@@ -1,0 +1,26 @@
+enum Sleeve {
+    SHORT
+    LONG
+    NONE
+}
+
+enum TopSubCategory {
+    SWEATSHIRT
+    SHIRT
+    TANK_TOP
+    DRESS_SHIRT
+}
+
+type Tops {
+    id: ID!
+    product_id: Int!
+    product_name: String!
+    sleeve: Sleeve!
+    sub_category: TopSubCategory!
+}
+
+type Query {
+    getAllTops: [Tops]
+    getAllTopsBySleeve(sleeve: Sleeve! sub_category: TopSubCategory): [Tops]
+    getTopsSubCategory(sub_category: TopSubCategory!): [Tops]
+}

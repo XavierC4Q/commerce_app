@@ -1,16 +1,9 @@
 enum ProductCategory {
     FOOTWEAR
-    TOP
-    BOTTOM
+    TOPS
+    BOTTOMS
     OUTERWEAR
     ACCESSORY
-}
-
-enum FootwearSubCategory {
-    CASUAL
-    SNEAKERS
-    BOOTS
-    DRESS_SHOE
 }
 
 type Product {
@@ -26,7 +19,7 @@ type Query {
 
 type Mutation {
     removeProduct(product_id: Int!): Boolean!
-    updateProduct(product_id: Int!, product_name: String!): Boolean!
+    updateProductName(product_id: Int!, product_name: String!): Boolean!
     addFootwearProduct(
     product_name: String! 
     sub_category: FootwearSubCategory,
@@ -37,4 +30,7 @@ type Mutation {
     colors: [String!]!,
     price: Float!
     ): Boolean!
+    updatePrice(price: Int!): Boolean!
+    updateProductColor(colors: [String!]!): Boolean!
+    updateProductSize(sizes: [String!]!): Boolean!
 }

@@ -10,15 +10,20 @@ const footwearResolverArray = fileLoader(path.join(__dirname, './resolvers/footw
 const userTypesArray = fileLoader(path.join(__dirname, './types/user_types'))
 const userResolverArray = fileLoader(path.join(__dirname, './resolvers/user_resolvers'))
 
+const topsTypesArrays = fileLoader(path.join(__dirname, './types/tops_types'))
+const topsResolverArrays = fileLoader(path.join(__dirname, './resolvers/tops_resolvers'))
+
 const allTypes = [
     ...footwearTypesArray, 
     ...userTypesArray,
-    ...productTypesArray
+    ...productTypesArray,
+    ...topsTypesArrays
 ]
 const allResolvers = [
     ...footwearResolverArray, 
     ...userResolverArray,
-    ...productResolverArray
+    ...productResolverArray,
+    ...topsResolverArrays
 ]
 
 export const graphqlSchema = {

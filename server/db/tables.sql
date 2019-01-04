@@ -15,16 +15,26 @@ CREATE TABLE products (
     product_name TEXT NOT NULL UNIQUE,
     category TEXT NOT NULL
 );
---- Footwear Table References to Products
---- product_name deferred immediately to allow for potential updates
+
+--- PRODUCT CATEGORIES
+
 CREATE TABLE footwear (
     id SERIAL PRIMARY KEY,
     product_id INTEGER REFERENCES products (id) UNIQUE,
     product_name TEXT REFERENCES products (product_name) DEFERRABLE INITIALLY IMMEDIATE UNIQUE,
     sub_category TEXT NOT NULL
 );
---- Sneakers Table
---- product_name deferred immediately to allow for potential changes
+
+CREATE TABLE tops (
+    id SERIAL PRIMARY KEY,
+    product_id INTEGER REFERENCES products (id) UNIQUE,
+    product_name TEXT REFERENCES products (product_name) DEFERRABLE INITIALLY IMMEDIATE UNIQUE,
+    sleeve TEXT NOT NULL,
+    sub_category TEXT NOT NULL
+);
+
+--- PRODUCT SUB CATEGORIES
+
 CREATE TABLE sneakers (
     id SERIAL PRIMARY KEY,
     product_name TEXT REFERENCES footwear (product_name) DEFERRABLE INITIALLY IMMEDIATE UNIQUE,
@@ -33,8 +43,7 @@ CREATE TABLE sneakers (
     female BOOLEAN NOT NULL,
     child BOOLEAN NOT NULL
 );
---- Boots Table
---- product_name deferred immediately to allow for potential changes
+
 CREATE TABLE boots (
     id SERIAL PRIMARY KEY,
     product_name TEXT REFERENCES footwear (product_name) DEFERRABLE INITIALLY IMMEDIATE UNIQUE,
@@ -43,8 +52,7 @@ CREATE TABLE boots (
     female BOOLEAN NOT NULL,
     child BOOLEAN NOT NULL
 );
---- Dress Shoes Table
---- product_name deferred immediately to allow for potential changes
+
 CREATE TABLE dress_shoe (
     id SERIAL PRIMARY KEY,
     product_name TEXT REFERENCES footwear (product_name) DEFERRABLE INITIALLY IMMEDIATE UNIQUE,
@@ -53,6 +61,44 @@ CREATE TABLE dress_shoe (
     female BOOLEAN NOT NULL,
     child BOOLEAN NOT NULL
 );
+
+CREATE TABLE shirt (
+    id SERIAL PRIMARY KEY,
+    product_name TEXT REFERENCES tops (product_name) DEFERRABLE INITIALLY IMMEDIATE UNIQUE,
+    product_id INTEGER REFERENCES tops (product_id),
+    male BOOLEAN NOT NULL,
+    female BOOLEAN NOT NULL,
+    child BOOLEAN NOT NULL
+);
+
+CREATE TABLE tank_top (
+    id SERIAL PRIMARY KEY,
+    product_name TEXT REFERENCES tops (product_name) DEFERRABLE INITIALLY IMMEDIATE UNIQUE,
+    product_id INTEGER REFERENCES tops (product_id),
+    male BOOLEAN NOT NULL,
+    female BOOLEAN NOT NULL,
+    child BOOLEAN NOT NULL
+);
+
+CREATE TABLE sweatshirt (
+    id SERIAL PRIMARY KEY,
+    product_name TEXT REFERENCES tops (product_name) DEFERRABLE INITIALLY IMMEDIATE UNIQUE,
+    product_id INTEGER REFERENCES tops (product_id),
+    male BOOLEAN NOT NULL,
+    female BOOLEAN NOT NULL,
+    child BOOLEAN NOT NULL
+);
+
+CREATE TABLE dress_shirt (
+    id SERIAL PRIMARY KEY,
+    product_name TEXT REFERENCES tops (product_name) DEFERRABLE INITIALLY IMMEDIATE UNIQUE,
+    product_id INTEGER REFERENCES tops (product_id),
+    male BOOLEAN NOT NULL,
+    female BOOLEAN NOT NULL,
+    child BOOLEAN NOT NULL
+);
+
+--- PRODUCT INFO
 
 CREATE TABLE product_sizes (
     id SERIAL PRIMARY KEY,
@@ -291,3 +337,25 @@ VALUES
 (24, '{"FADED BLUE", "GREY"}'),
 (25, '{"TAN", "GREY"}'),
 (26, '{"ORANGE"}');
+
+INSERT INTO tops (product_id, product_name, sleeve, sub_category)
+VALUES
+(2, 'Blue Denim Shirt', 'LONG', 'SHIRT'),
+(7, 'Rolling Stones T-shirt', 'SHORT', 'SHIRT'),
+(14, 'Christmas Sweater', 'LONG', 'SWEATSHIRT'),
+(20, 'Banana Tank Top', 'NONE', 'TANK_TOP'),
+(26, 'Orange Logo V-neck', 'SHORT', 'SHIRT');
+
+INSERT INTO shirt (product_name, product_id, male, female, child)
+VALUES
+('Blue Denim Shirt', 2, false, true, false),
+('Rolling Stones T-shirt', 7, true, false, false),
+('Orange Logo V-neck', 26, false, false, true);
+
+INSERT INTO tank_top (product_name, product_id, male, female, child)
+VALUES
+('Banana Tank Top', 20, true, false, false);
+
+INSERT INTO sweatshirt (product_name, product_id, male, female, child)
+VALUES
+('Christmas Sweater', 14, true, false, false);
