@@ -16,3 +16,16 @@ type Query {
     allFootwearBySubCategory(sub_category: FootwearSubCategory!): [Footwear]
     getFootwearByProductID(product_id: Int!): Footwear
 }
+
+type Mutation {
+    addFootwearProduct(
+    product_name: String! 
+    sub_category: FootwearSubCategory,
+    male: Boolean!,
+    female: Boolean!,
+    child: Boolean!,
+    sizes: [Float!]!,
+    colors: [String!]!,
+    price: Float!
+    ): Boolean!
+}

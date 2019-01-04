@@ -83,42 +83,5 @@ export default {
     } catch (err) {
       return false
     }
-  },
-  addFootwearProduct: async ({
-    product_name,
-    sub_category,
-    male,
-    female,
-    child,
-    sizes,
-    colors,
-    price
-  }) => {
-    try {
-      // ADDS PRODUCT TO PRODUCT TABLE
-      const addProduct = await db.one(queries.addProduct, [product_name, 'FOOTWEAR'])
-      // ADDS PRODUCT TO FOOTWEAR TABLE
-      const addFootwear = await db.one(queries.addFootwear, [addProduct.id, product_name, sub_category])
-      // ADDS PRODUCT TO SUBCATEGORY TABLE OF FOOTWEAR
-      await db.one(queries.addFootwearSubCategory,
-        [
-          sub_category.toLowerCase(),
-          product_name,
-          addFootwear.product_id,
-          male,
-          female,
-          child
-        ])
-      // ADDS FOOTWEAR PRICE TO PRICES TABLE
-      await db.none(queries.insertIntoPrices, [addFootwear.product_id, price])
-      // ADDS FOOTWEAR COLORS TO PRODUCT_COLORS TABLE
-      await db.none(queries.insertIntoProductColors, [addFootwear.product_id, colors])
-      // ADDS FOOTWEAR SIZE TO PRODUCT_SIZES TABLE
-      await db.none(queries.insertIntoProductSizes, [addFootwear.product_id, sizes])
-
-      return true
-    } catch (err) {
-      return false
-    }
   }
 };

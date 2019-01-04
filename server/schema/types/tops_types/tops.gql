@@ -20,7 +20,19 @@ type Tops {
 }
 
 type Query {
-    getAllTops: [Tops]
     getAllTopsBySleeve(sleeve: Sleeve! sub_category: TopSubCategory): [Tops]
     getTopsSubCategory(sub_category: TopSubCategory!): [Tops]
+}
+
+type Mutation {
+    addTops(
+    product_name: String! 
+    sleeve: Sleeve! 
+    sub_category: TopSubCategory!
+    male: Boolean!
+    female: Boolean!
+    child: Boolean!
+    price: Float!
+    sizes: [Float!]!
+    colors: [String!]!): Boolean!
 }

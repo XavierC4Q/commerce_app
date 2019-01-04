@@ -219,31 +219,31 @@ VALUES
 INSERT INTO products (product_name, category)
 VALUES
 ('Air Jordan 6', 'FOOTWEAR'), 
-('Blue Denim Shirt', 'TOP'),
+('Blue Denim Shirt', 'TOPS'),
 ('Black Ripped Jeans', 'BOTTOM'), 
 ('Snake Leather Boots', 'FOOTWEAR'),
 ('Trenchcoat by Polo', 'OUTERWEAR'), 
 ('Gucci Belt', 'ACCESSORY'),
-('Rolling Stones T-shirt', 'TOP'), 
+('Rolling Stones T-shirt', 'TOPS'), 
 ('Adidas Boost', 'FOOTWEAR'),
 ('Camo Joggers', 'BOTTOM'), 
 ('Raincoat by Eazy', 'OUTERWEAR'),
 ('Moonstone Ring', 'ACCESSORY'),
 ('Brogues', 'FOOTWEAR'),
 ('Beach Shorts', 'BOTTOM'),
-('Christmas Sweater', 'TOP'),
+('Christmas Sweater', 'TOPS'),
 ('Puffy Coat', 'OUTERWEAR'),
 ('Boar Tooth Necklace', 'ACCESSORY'),
 ('Doc Marten Deluxe', 'FOOTWEAR'),
 ('Glass Slippers', 'FOOTWEAR'),
 ('Purple Slacks', 'BOTTOM'),
-('Banana Tank Top', 'TOP'),
+('Banana Tank Top', 'TOPS'),
 ('Pearl Necklace', 'ACCESSORY'),
 ('Bear Fur Coat', 'OUTERWEAR'),
 ('Golden Cleats', 'FOOTWEAR'),
 ('Skinny Biker Jeans', 'BOTTOM'),
 ('Chelsea Boots', 'FOOTWEAR'),
-('Orange Logo V-neck', 'TOP');
+('Orange Logo V-neck', 'TOPS');
 
 INSERT INTO footwear (product_id, product_name, sub_category)
 VALUES

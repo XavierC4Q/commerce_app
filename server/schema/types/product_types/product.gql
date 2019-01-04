@@ -20,17 +20,7 @@ type Query {
 type Mutation {
     removeProduct(product_id: Int!): Boolean!
     updateProductName(product_id: Int!, product_name: String!): Boolean!
-    addFootwearProduct(
-    product_name: String! 
-    sub_category: FootwearSubCategory,
-    male: Boolean!,
-    female: Boolean!,
-    child: Boolean!,
-    sizes: [Float!]!,
-    colors: [String!]!,
-    price: Float!
-    ): Boolean!
-    updatePrice(price: Int!): Boolean!
-    updateProductColor(colors: [String!]!): Boolean!
-    updateProductSize(sizes: [String!]!): Boolean!
+    updatePrice(product_id: Int!, price: Float!): Boolean!
+    updateProductColor(product_id: Int!, colors: [String!]!): Boolean!
+    updateProductSize(product_id: Int!, sizes: [String!]!): Boolean!
 }
